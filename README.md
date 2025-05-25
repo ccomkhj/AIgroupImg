@@ -1,116 +1,65 @@
 # AIgroupImg
 
-A Python application to organize your images by similarity using AI-powered feature extraction and advanced machine learning techniques.
+AI-powered image organization tool using advanced feature extraction and machine learning for similarity-based clustering.
 
-This project extends [groupImg](https://github.com/victorqribeiro/groupImg) with AI-powered feature extraction (using neural network encoders) and dimensionality reduction methods to improve clustering accuracy, especially for images with varying poses, rotations, and viewpoints.
+
+## Key Features
+
+- **Neural Network Encoders** - Extract rich feature representations from images
+- **Dimensionality Reduction** - PCA and t-SNE for better clustering
+- **Visual Cluster Analysis** - View sample images from each cluster
+
+## Use Cases
+
+- **E-commerceThumbnail Feature Extraction** - Extract structured features from thumbnails for predictive modeling
 
 
 ## How to use
 
-Navigate to the folder you want. CLI - Command Line Interface or GUI - Graphic User Interface
+Install dependencies for CLI or GUI:
 
-Install the requirements.txt
-
-```
-pip install -r requirements.txt
+```bash
+pip install -r cli/requirements.txt  # For CLI
+pip install -r gui/requirements.txt  # For GUI with visualization
 ```
 
 ### CLI
 
 Call the script passing the image folder you want to organize.
 
-```
-python groupimg.py -f /home/user/Pictures/
-```
-
-## Parameters
-
-### Basic Parameters
-
-\-f folder where your images are (use absolute path).
-
 ```bash
-groupimg -f /home/user/Pictures
+python cli/groupimg.py -f /path/to/images [-k NUM_CLUSTERS] [--feature MODEL] [options]
 ```
 
+**Basic Options:**
 
-\-k number of folders you want to separate your images. 
+- `-f PATH` - Folder containing images (required)
+- `-k NUM` - Number of clusters (default: 3)
+- `-m` - Move images instead of copying
+- `-s` - Consider image size as a feature
 
-```bash
-groupimg -f /home/user/Pictures -k 5
-```
+**Advanced Options:**
 
-\-m if you want to move your images instead of just copy them.
-
-\-s if you want the algorithm to consider the size of the images as a feature.
-
-### Advanced Parameters
-
-\--feature select the feature extraction method (default: histogram)
-
-```bash
-groupimg -f /home/user/Pictures --feature swin
-```
-
-Available Feature Extraction Methods:
-
-- `histogram`: Original histogram-based method (works with basic dependencies)  
-- `vit`: Vision Transformer - powerful for general feature extraction  
-- `swin`: Swin Transformer - excellent at capturing hierarchical features with varying receptive fields  
-- `efficientnetv2`: EfficientNetV2 - state-of-the-art CNN architecture  
-
-\--dim-reduction apply dimensionality reduction technique (default: None)
-
-```bash
-groupimg -f /home/user/Pictures --feature swin --dim-reduction pca
-```
-
-Available Dimensionality Reduction Methods:
-
-- `pca`: Principal Component Analysis - linear dimensionality reduction  
-- `tsne`: t-SNE - t-Distributed Stochastic Neighbor Embedding - nonlinear dimensionality reduction that preserves cluster structure  
-
-\--dim-components number of components to reduce features to (default: 50)
-
-```bash
-groupimg -f /home/user/Pictures --feature swin --dim-reduction pca --dim-components 20
-```
-
-### Complete Example
-
-```bash
-python groupimg.py -f /home/user/Pictures -k 5 --feature swin --dim-reduction pca --dim-components 20 -s
-```
+- `--feature MODEL` - Feature extraction method (histogram, vit, swin, efficientnetv2)
+- `--dim-reduction METHOD` - Dimensionality reduction (pca, tsne)
+- `--dim-components NUM` - Number of components for dimension reduction (default: 50)
 
 ### GUI
 
 ![groupImgGUI](./demo/screenshot-GUI.png)
 
-Just call the groupImgGUI.py file.
-
 ```bash
-```bash
-python groupImgGUI.py
+python gui/groupImgGUI.py
 ```
 
+Select a folder of images and adjust settings as needed.
 
-Click the button Select folder to select the folder with the pictures you want to organize.
+**Settings Options:**
 
-You can adjust the settings by checking the settings box.
-
-#### Basic Settings
-
-- **N. Group** - How many groups should the images be separated in
-- **Resample** - Size to resample the image before comparing (small sizes gives fast results)
-- **Move** - Move the images instead of copy them (useful if you have low space on your hard drive)
-- **Size** - Consider the size of the images to organize them (useful if you want to separate thumbnails from real pictures)
-- **Visualization** - Display sample images from each cluster after processing
-
-#### Advanced Settings
-
-- **Feature Method** - Choose between histogram (original) and advanced deep learning feature extraction methods
-- **Dim. Reduction** - Apply dimensionality reduction to the extracted features
-- **Dim. Components** - Number of components to reduce to when using dimensionality reduction
+- **N. Group** - Number of clusters
+- **Feature Method** - Feature extraction method (histogram, ViT, Swin, EfficientNetV2)
+- **Dim. Reduction** - Dimensionality reduction method (PCA, t-SNE)
+- **Visualization** - Display sample images from each cluster
 
 ### Visualization
 
@@ -120,40 +69,12 @@ When the visualization option is enabled, the application will display sample im
 
 ## How It Works
 
-### Original Approach (Histogram Method)
-
-The original method uses histogram-based feature extraction:
-1. Images are resized to a smaller resolution (configurable)
-2. A histogram of pixel values is computed for each image
-3. Optionally, image dimensions can be added as features
-4. K-means clustering is applied to group similar images together
-
-This approach works well for similar images but struggles with variations in pose, rotation, and viewpoint.
-
-### Enhanced Approach (Deep Learning Models)
-
-The enhanced version adds support for state-of-the-art deep learning feature extraction:
-
-1. **Advanced Feature Extraction**:
-   - **Vision Transformer (ViT)**: Treats images as sequences of patches and applies self-attention.
-   - **Swin Transformer**: Uses a hierarchical transformer with shifted windows for efficient modeling.
-   - **EfficientNetV2**: Advanced CNN architecture optimized for both performance and efficiency.
-
-2. **Dimensionality Reduction**:
-   - **PCA**: Linear dimensionality reduction that preserves variance.
-   - **t-SNE**: Non-linear technique that preserves local structure, revealing clusters more effectively.
-
-These advanced methods produce features that are more robust to variations in pose, rotation, and viewpoint, resulting in more meaningful image groupings.
-
-## Requirements
-
-Install all dependencies with:
-
-```bash
-pip install -r cli/requirements.txt  # For CLI version
-# OR
-pip install -r gui/requirements.txt  # For GUI version with visualization
-```
+1. **Feature Extraction** - Extract rich representations using:
+   - **Histogram [original]** - Color distribution-based features
+   - **Deep Learning Models** - ViT, Swin Transformer, EfficientNetV2
+2. **Dimensionality Reduction** - Optionally apply PCA or t-SNE to the features
+3. **Clustering** - Use K-means to group similar images
+4. **Organization** - Sort images into folders by cluster
 
 ## Credits
 
